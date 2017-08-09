@@ -816,7 +816,7 @@ void ProcessSwitch(char * s)
             case 't': strthr = s; while ((*s >= '0') && (*s <= '9')) s++;
                       paramnumthr = atoi(strthr);
 		      if(paramnumthr == 1)
-		      	paramEnableParallelProcessing = 0;
+		      	paramEnableMultiThreading = paramEnableParallelProcessing = 0;
 		      else
 			paramEnableParallelProcessing = 1;		
 		      break;
