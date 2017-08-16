@@ -496,7 +496,7 @@ void Decompression(char * argv[])
     int numThreads = 1;
     if (paramEnableParallelProcessing)
     {
-        numThreads = omp_get_max_threads();
+        numThreads = paramnumthr;
         if (numThreads <= nBlocks) paramEnableMultiThreading = 0;
         if (numThreads >= nBlocks) numThreads = nBlocks;
     }
