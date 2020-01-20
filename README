@@ -73,6 +73,11 @@ http://msdn.microsoft.com/en-us/windows/hardware/gg487368.aspx#E2
 Sort Transform:
 ---------------
 
+EDIT: I believe the following two paragraphs no longer apply, since US patent
+6,199,064 expired on 2009/03/06. However, I am no liable under any circumstance
+for any outcome should you decide to act on this information. You are expected to
+do your due diligence and find out for yourself about the legal status of your code.
+
 Sort Transform is patented by Michael Schindler under US patent 6,199,064.
 However for research purposes this algorithm is included in this software.
 So if you are of the type who should worry about this (making money) worry away.
