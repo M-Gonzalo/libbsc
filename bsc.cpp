@@ -78,7 +78,7 @@ int paramBlockSorter              = LIBBSC_BLOCKSORTER_BWT;
 int paramCoder                    = LIBBSC_CODER_QLFC_STATIC;
 int paramSortingContexts          = LIBBSC_CONTEXTS_FOLLOWING;
 
-int paramEnableParallelProcessing = 1;
+int paramEnableParallelProcessing = 0;
 int paramEnableMultiThreading     = 1;
 int paramEnableFastMode           = 1;
 int paramEnableLargePages         = 0;
@@ -88,6 +88,7 @@ int paramEnableReordering         = 0;
 int paramEnableLZP                = 1;
 int paramLZPHashSize              = 16;
 int paramLZPMinLen                = 128;
+int paramnumthr			  = 1;
 
 int paramFeatures()
 {
@@ -193,7 +194,7 @@ void Compression(char * argv[])
     int numThreads = 1;
     if (paramEnableParallelProcessing)
     {
-        numThreads = omp_get_max_threads();
+        numThreads = paramnumthr;
         if (numThreads <= nBlocks) paramEnableMultiThreading = 0;
         if (numThreads >= nBlocks) numThreads = nBlocks;
     }
@@ -495,7 +496,7 @@ void Decompression(char * argv[])
     int numThreads = 1;
     if (paramEnableParallelProcessing)
     {
-        numThreads = omp_get_max_threads();
+        numThreads = paramnumthr;
         if (numThreads <= nBlocks) paramEnableMultiThreading = 0;
         if (numThreads >= nBlocks) numThreads = nBlocks;
     }
@@ -717,7 +718,7 @@ void ShowUsage(void)
     fprintf(stdout, "  -P       Enable large 2MB RAM pages, default: disable\n");
 #endif
 #ifdef LIBBSC_OPENMP
-    fprintf(stdout, "  -t       Disable parallel blocks processing, default: enable\n");
+    fprintf(stdout, "  -t<num_thr>       Number of threads: default 1\n");
     fprintf(stdout, "  -T       Disable multi-core systems support, default: enable\n");
 #endif
 
@@ -727,6 +728,7 @@ void ShowUsage(void)
 
 void ProcessSwitch(char * s)
 {
+	char *strthr;
     if (*s == 0)
     {
         ShowUsage();
@@ -811,7 +813,13 @@ void ProcessSwitch(char * s)
             case 'p': paramEnableLZP = paramEnableSegmentation = paramEnableReordering = 0; break;
 
 #ifdef LIBBSC_OPENMP
-            case 't': paramEnableParallelProcessing = 0; break;
+            case 't': strthr = s; while ((*s >= '0') && (*s <= '9')) s++;
+                      paramnumthr = atoi(strthr);
+		      if(paramnumthr == 1)
+		      	paramEnableMultiThreading = paramEnableParallelProcessing = 0;
+		      else
+			paramEnableParallelProcessing = 1;		
+		      break;
             case 'T': paramEnableParallelProcessing = paramEnableMultiThreading = 0; break;
 #endif
 
